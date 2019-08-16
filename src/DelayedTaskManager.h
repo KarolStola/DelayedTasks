@@ -10,6 +10,7 @@ public:
     void AddDelayedTask(DelayedTask * newTask);
     void Update();
     static DelayedTaskManager & Get();
+    unsigned long GetDeltaMillis();
 
 private:
     typedef std::vector<DelayedTask *> Tasks;
@@ -17,8 +18,8 @@ private:
     void UpdateTimes();
     void UpdateTaskIterator(Tasks::iterator & taskIterator);
 
-    unsigned long currentTime = 0;
-    unsigned long deltaTime = 0;
+    unsigned long currentMillis = 0;
+    unsigned long deltaMillis = 0;
     bool isBeingUpdated = false;
     Tasks tasks;
     Tasks tasksToAdd;

@@ -1,18 +1,20 @@
-#include "DelayedTask.h"
 
-DelayedTask::DelayedTask(int delay)
-    :delayRemaining(delay)
+#include "DelayedTask.h"
+#include "MillisDelayedTaskTimer.h"
+
+DelayedTask::DelayedTask(long delay)
+    :timer(new MillisDelayedTaskTimer(delay))
 {
 }
 
 bool DelayedTask::ShouldBeExecuted()
 {
-    return delayRemaining <= 0;
+    return timer->CountedDown();
 }
 
-void DelayedTask::Update(unsigned long deltaTime)
+void DelayedTask::Update()
 {
-    delayRemaining -= deltaTime;
+    timer->Update();
 
     if (ShouldBeExecuted())
     {
@@ -23,4 +25,14 @@ void DelayedTask::Update(unsigned long deltaTime)
 bool DelayedTask::WasExecuted()
 {
     return ShouldBeExecuted();
+}
+
+DelayedTask::~DelayedTask()
+{
+    Cleanup();
+}
+
+void DelayedTask::Cleanup()
+{
+    delete(timer);
 }

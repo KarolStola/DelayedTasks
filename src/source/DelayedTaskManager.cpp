@@ -15,8 +15,13 @@ void DelayedTaskManager::AddDelayedTask(DelayedTask * newTask)
     {
         tasks.push_back(newTask);
     }
-    
 }
+
+unsigned long DelayedTaskManager::GetDeltaMillis()
+{
+    return deltaMillis;
+}
+
 
 void DelayedTaskManager::Update()
 {
@@ -35,22 +40,22 @@ void DelayedTaskManager::Update()
     {
         AddDelayedTask(task);
     }
-    
+
     tasksToAdd.clear();
 }
 
 void DelayedTaskManager::UpdateTimes()
 {
-    auto newTime = millis();
-    deltaTime = newTime - currentTime;
-    currentTime = newTime;
+    auto newMillis = millis();
+    deltaMillis = newMillis - currentMillis;
+    currentMillis = newMillis;
 }
 
 
 void DelayedTaskManager::UpdateTaskIterator(Tasks::iterator & taskIterator)
 {
     auto & task = *taskIterator;
-    task->Update(deltaTime);
+    task->Update();
 
     if(task->WasExecuted())
     {

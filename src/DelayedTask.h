@@ -5,17 +5,19 @@
 class DelayedTask
 {
 public:
-    DelayedTask(int delay);
-    void Update(unsigned long deltaTime);
+    DelayedTask(long delay);
+    void Update();
     bool WasExecuted();
+    virtual ~DelayedTask();
 
 protected:
     virtual void Execute() = 0;
 
 private:
     bool ShouldBeExecuted();
-    
-    int delayRemaining  = 0;
+    void Cleanup();
+
+    class DelayedTaskTimer * timer;
 };
 
 #endif
