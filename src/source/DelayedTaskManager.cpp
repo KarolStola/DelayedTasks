@@ -1,9 +1,9 @@
-#include <Arduino.h>
+
 #include "DelayedTaskManager.h"
 
-void DelayedTaskManager::AddDelayedTask(DelayedTask * newTask)
+void DelayedTaskManager::AddDelayedTask(DelayedTask *newTask)
 {
-    task = newTask;
+    tasks.push_back(newTask);
 }
 
 void DelayedTaskManager::Update()
@@ -12,9 +12,19 @@ void DelayedTaskManager::Update()
     auto deltaTime = newTime - currentTime;
     currentTime = newTime;
 
-    task->NotifyMillisecondsPassed(deltaTime);
-    if(task->ShouldBeExecuted())
+    for(auto taskIterator = tasks.begin(); taskIterator != tasks.end(); )
     {
-        task->Execute();
+        auto & task = *taskIterator;
+        task->Update(deltaTime);
+
+        if(task->WasExecuted())
+        {
+            delete(task);
+            tasks.erase(taskIterator);
+        }
+        else
+        {
+            taskIterator++;
+        }
     }
 }

@@ -1,3 +1,4 @@
+
 #ifndef DELAYED_TASK_H
 #define DELAYED_TASK_H
 
@@ -5,11 +6,15 @@ class DelayedTask
 {
 public:
     DelayedTask(int delay);
+    void Update(unsigned long deltaTime);
+    bool WasExecuted();
+
+protected:
     virtual void Execute() = 0;
-    bool ShouldBeExecuted();
-    void NotifyMillisecondsPassed(int millisecondsPassed);
 
 private:
+    bool ShouldBeExecuted();
+    
     int delayRemaining  = 0;
 };
 

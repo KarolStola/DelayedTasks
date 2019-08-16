@@ -10,7 +10,17 @@ bool DelayedTask::ShouldBeExecuted()
     return delayRemaining <= 0;
 }
 
-void DelayedTask::NotifyMillisecondsPassed(int millisecondsPassed)
+void DelayedTask::Update(unsigned long deltaTime)
 {
-    delayRemaining -= millisecondsPassed;
+    delayRemaining -= deltaTime;
+
+    if (ShouldBeExecuted())
+    {
+        Execute();
+    }
+}
+
+bool DelayedTask::WasExecuted()
+{
+    return ShouldBeExecuted();
 }
