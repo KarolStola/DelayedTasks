@@ -1,30 +1,69 @@
 
+#include <Arduino.h>
 #include "DelayedTaskManager.h"
+#include "DelayedTask.h"
 
-void DelayedTaskManager::AddDelayedTask(DelayedTask *newTask)
+DelayedTaskManager DelayedTaskManager::delayedTaskManager;
+
+void DelayedTaskManager::AddDelayedTask(DelayedTask * newTask)
 {
-    tasks.push_back(newTask);
+    if(isBeingUpdated)
+    {
+        tasksToAdd.push_back(newTask);
+    }
+    else
+    {
+        tasks.push_back(newTask);
+    }
+    
 }
 
 void DelayedTaskManager::Update()
 {
-    auto newTime = millis();
-    auto deltaTime = newTime - currentTime;
-    currentTime = newTime;
+    isBeingUpdated = true;
+    
+    UpdateTimes();
 
     for(auto taskIterator = tasks.begin(); taskIterator != tasks.end(); )
     {
-        auto & task = *taskIterator;
-        task->Update(deltaTime);
-
-        if(task->WasExecuted())
-        {
-            delete(task);
-            tasks.erase(taskIterator);
-        }
-        else
-        {
-            taskIterator++;
-        }
+        UpdateTaskIterator(taskIterator);
     }
+
+    isBeingUpdated = false;
+
+    for (auto & task : tasksToAdd)
+    {
+        AddDelayedTask(task);
+    }
+    
+    tasksToAdd.clear();
+}
+
+void DelayedTaskManager::UpdateTimes()
+{
+    auto newTime = millis();
+    deltaTime = newTime - currentTime;
+    currentTime = newTime;
+}
+
+
+void DelayedTaskManager::UpdateTaskIterator(Tasks::iterator & taskIterator)
+{
+    auto & task = *taskIterator;
+    task->Update(deltaTime);
+
+    if(task->WasExecuted())
+    {
+        delete(task);
+        tasks.erase(taskIterator);
+    }
+    else
+    {
+        taskIterator++;
+    }
+}
+
+DelayedTaskManager & DelayedTaskManager::Get()
+{
+    return delayedTaskManager;
 }
