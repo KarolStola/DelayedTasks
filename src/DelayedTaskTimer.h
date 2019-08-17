@@ -5,15 +5,17 @@
 class DelayedTaskTimer
 {
 public:
-    DelayedTaskTimer(long timeRemaining);
-    void Update();
+    DelayedTaskTimer(unsigned long delay, unsigned long startTime);
     bool CountedDown();
+    unsigned long GetElapsedTime();
 
 protected:
-    virtual unsigned long GetDeltaTime() = 0;
+    virtual unsigned long GetCurrentTime() = 0;
 
 private:
-    long timeRemaining = 0;
+    
+    unsigned long delay = 0;
+    unsigned long startTime = 0;
 };
 
 #endif

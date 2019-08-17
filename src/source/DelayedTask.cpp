@@ -1,9 +1,9 @@
 
 #include "DelayedTask.h"
-#include "MillisDelayedTaskTimer.h"
+#include "MicrosDelayedTaskTimer.h"
 
 DelayedTask::DelayedTask(long delay)
-    :timer(new MillisDelayedTaskTimer(delay))
+    :timer(new MicrosDelayedTaskTimer(delay))
 {
 }
 
@@ -14,8 +14,6 @@ bool DelayedTask::ShouldBeExecuted()
 
 void DelayedTask::Update()
 {
-    timer->Update();
-
     if (ShouldBeExecuted())
     {
         Execute();

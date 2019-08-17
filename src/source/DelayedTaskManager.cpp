@@ -17,19 +17,11 @@ void DelayedTaskManager::AddDelayedTask(DelayedTask * newTask)
     }
 }
 
-unsigned long DelayedTaskManager::GetDeltaMillis()
-{
-    return deltaMillis;
-}
-
-
 void DelayedTaskManager::Update()
 {
     isBeingUpdated = true;
     
-    UpdateTimes();
-
-    for(auto taskIterator = tasks.begin(); taskIterator != tasks.end(); )
+    for(auto taskIterator = tasks.begin(); taskIterator < tasks.end(); )
     {
         UpdateTaskIterator(taskIterator);
     }
@@ -40,17 +32,8 @@ void DelayedTaskManager::Update()
     {
         AddDelayedTask(task);
     }
-
     tasksToAdd.clear();
 }
-
-void DelayedTaskManager::UpdateTimes()
-{
-    auto newMillis = millis();
-    deltaMillis = newMillis - currentMillis;
-    currentMillis = newMillis;
-}
-
 
 void DelayedTaskManager::UpdateTaskIterator(Tasks::iterator & taskIterator)
 {
@@ -71,4 +54,22 @@ void DelayedTaskManager::UpdateTaskIterator(Tasks::iterator & taskIterator)
 DelayedTaskManager & DelayedTaskManager::Get()
 {
     return delayedTaskManager;
+}
+
+int DelayedTaskManager::GetTaskCount()
+{
+    return tasks.size() + tasksToAdd.size();
+}
+
+DelayedTaskManager::~DelayedTaskManager()
+{
+    for (auto & task : tasks)
+    {
+        delete(task);
+    }
+
+    for (auto & task : tasksToAdd)
+    {
+        delete(task);
+    }
 }

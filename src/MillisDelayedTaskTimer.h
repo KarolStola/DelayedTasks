@@ -9,7 +9,8 @@ public:
     MillisDelayedTaskTimer(long timeRemainging);
     
 protected:
-    virtual unsigned long GetDeltaTime() override;
+    virtual unsigned long GetCurrentTime() override;
+
 };
 
 #endif

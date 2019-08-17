@@ -2,17 +2,19 @@
 #include "DelayedTaskManager.h"
 #include "DelayedTaskTimer.h"
 
-DelayedTaskTimer::DelayedTaskTimer(long timeRemaining)
-    : timeRemaining(timeRemaining)
+DelayedTaskTimer::DelayedTaskTimer(unsigned long delay, unsigned long startTime)
+    : delay(delay)
+    , startTime(startTime)
 {
 }
 
 bool DelayedTaskTimer::CountedDown()
 {
-    return timeRemaining <= 0;
+    return GetElapsedTime() >= delay;
 } 
 
-void DelayedTaskTimer::Update()
+unsigned long DelayedTaskTimer::GetElapsedTime()
 {
-    timeRemaining -= GetDeltaTime();
+    return GetCurrentTime() - startTime;
 }
+

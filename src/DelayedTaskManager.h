@@ -8,18 +8,16 @@ class DelayedTaskManager
 {
 public:
     void AddDelayedTask(DelayedTask * newTask);
+    int GetTaskCount();
     void Update();
     static DelayedTaskManager & Get();
-    unsigned long GetDeltaMillis();
+    virtual ~DelayedTaskManager();
 
 private:
     typedef std::vector<DelayedTask *> Tasks;
 
-    void UpdateTimes();
     void UpdateTaskIterator(Tasks::iterator & taskIterator);
 
-    unsigned long currentMillis = 0;
-    unsigned long deltaMillis = 0;
     bool isBeingUpdated = false;
     Tasks tasks;
     Tasks tasksToAdd;
