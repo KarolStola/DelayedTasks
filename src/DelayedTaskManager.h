@@ -10,19 +10,19 @@ public:
     void AddDelayedTask(DelayedTask * newTask);
     int GetTaskCount();
     void Update();
-    static DelayedTaskManager & Get();
+    void Clear();
     virtual ~DelayedTaskManager();
 
 private:
     typedef std::vector<DelayedTask *> Tasks;
 
     void UpdateTaskIterator(Tasks::iterator & taskIterator);
+    void Clear(Tasks & tasksToClear);
 
     bool isBeingUpdated = false;
     Tasks tasks;
     Tasks tasksToAdd;
 
-    static DelayedTaskManager delayedTaskManager;
 };
 
 #endif

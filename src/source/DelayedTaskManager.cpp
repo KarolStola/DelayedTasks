@@ -3,12 +3,10 @@
 #include "DelayedTaskManager.h"
 #include "DelayedTask.h"
 
-DelayedTaskManager DelayedTaskManager::delayedTaskManager;
-
 void DelayedTaskManager::AddDelayedTask(DelayedTask * newTask)
 {
     if(isBeingUpdated)
-    {
+    {   
         tasksToAdd.push_back(newTask);
     }
     else
@@ -21,9 +19,19 @@ void DelayedTaskManager::Update()
 {
     isBeingUpdated = true;
     
-    for(auto taskIterator = tasks.begin(); taskIterator < tasks.end(); )
+    for(int i = 0; i < tasks.size(); i++)
     {
-        UpdateTaskIterator(taskIterator);
+        tasks[i]->Update();
+    }
+
+    for(int i = tasks.size()-1; i >= 0; i--)
+    {
+        auto task = tasks[i]; 
+        if(task->WasExecuted())
+        {
+            delete(task);
+            tasks.erase(tasks.begin()+i);
+        }
     }
 
     isBeingUpdated = false;
@@ -32,28 +40,8 @@ void DelayedTaskManager::Update()
     {
         AddDelayedTask(task);
     }
+
     tasksToAdd.clear();
-}
-
-void DelayedTaskManager::UpdateTaskIterator(Tasks::iterator & taskIterator)
-{
-    auto & task = *taskIterator;
-    task->Update();
-
-    if(task->WasExecuted())
-    {
-        delete(task);
-        tasks.erase(taskIterator);
-    }
-    else
-    {
-        taskIterator++;
-    }
-}
-
-DelayedTaskManager & DelayedTaskManager::Get()
-{
-    return delayedTaskManager;
 }
 
 int DelayedTaskManager::GetTaskCount()
@@ -61,15 +49,23 @@ int DelayedTaskManager::GetTaskCount()
     return tasks.size() + tasksToAdd.size();
 }
 
-DelayedTaskManager::~DelayedTaskManager()
+void DelayedTaskManager::Clear()
 {
-    for (auto & task : tasks)
+    Clear(tasks);
+    Clear(tasksToAdd);
+}
+
+void DelayedTaskManager::Clear(Tasks & tasksToClear)
+{
+    for (auto & task : tasksToClear)
     {
         delete(task);
     }
 
-    for (auto & task : tasksToAdd)
-    {
-        delete(task);
-    }
+    tasksToClear.clear();
+}
+
+DelayedTaskManager::~DelayedTaskManager()
+{
+    Clear();
 }
