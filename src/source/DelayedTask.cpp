@@ -17,12 +17,13 @@ void DelayedTask::Update()
     if (ShouldBeExecuted())
     {
         Execute();
+        wasExecuted = true;
     }
 }
 
 bool DelayedTask::WasExecuted()
 {
-    return ShouldBeExecuted();
+    return wasExecuted;
 }
 
 DelayedTask::~DelayedTask()

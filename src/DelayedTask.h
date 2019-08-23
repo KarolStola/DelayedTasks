@@ -17,6 +17,7 @@ private:
     bool ShouldBeExecuted();
     void Cleanup();
 
+    bool wasExecuted = false;
     class DelayedTaskTimer * timer;
 };
 
