@@ -7,7 +7,7 @@ template<class Object>
 class DelayedMemberTask : public DelayedTask
 {
 public:
-    DelayedMemberTask(int delay, Object * object, void (Object::*function)());
+    DelayedMemberTask(int delay, DelayedTaskTimeResolution timeResolution, Object * object, void (Object::*function)());
     virtual void Execute() override;
     
 private:
@@ -16,8 +16,8 @@ private:
 };
 
 template<class Object>
-DelayedMemberTask<Object>::DelayedMemberTask(int delay, Object *  object, void (Object::*function)())
-    : DelayedTask(delay)
+DelayedMemberTask<Object>::DelayedMemberTask(int delay, DelayedTaskTimeResolution timeResolution, Object *  object, void (Object::*function)())
+    : DelayedTask(delay, timeResolution)
     , object(object)
     , function(function)
 {
