@@ -5,7 +5,8 @@
 class DelayedTaskTimer
 {
 public:
-    DelayedTaskTimer(unsigned long delay, unsigned long startTime);
+    void Start(unsigned long delay);
+    void Stop();
     bool CountedDown();
     unsigned long GetElapsedTime();
 
@@ -13,7 +14,7 @@ protected:
     virtual unsigned long GetCurrentTime() = 0;
 
 private:
-    
+    bool isStarted = false;
     unsigned long delay = 0;
     unsigned long startTime = 0;
 };

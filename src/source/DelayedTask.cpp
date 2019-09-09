@@ -3,9 +3,15 @@
 #include "MicrosDelayedTaskTimer.h"
 #include "MillisDelayedTaskTimer.h"
 
-DelayedTask::DelayedTask(long delay, DelayedTaskTimeResolution timeResolution)
-    :timer(CreateTimerForResolution(delay, timeResolution))
+DelayedTask::DelayedTask(DelayedTaskTimeResolution timeResolution)
+    :timer(CreateTimerForResolution(timeResolution))
 {
+}
+
+DelayedTask::DelayedTask(long delay, DelayedTaskTimeResolution timeResolution)
+    :timer(CreateTimerForResolution(timeResolution))
+{
+    timer->Start(delay);
 }
 
 bool DelayedTask::ShouldBeExecuted()
@@ -17,6 +23,7 @@ void DelayedTask::Update()
 {
     if (ShouldBeExecuted())
     {
+        timer->Stop();
         Execute();
         wasExecuted = true;
     }
@@ -27,15 +34,15 @@ bool DelayedTask::WasExecuted()
     return wasExecuted;
 }
 
-class DelayedTaskTimer * DelayedTask::CreateTimerForResolution(long timeRemaining, DelayedTaskTimeResolution timeResolution)
+class DelayedTaskTimer * DelayedTask::CreateTimerForResolution(DelayedTaskTimeResolution timeResolution)
 {
     switch (timeResolution)
     {
     case DelayedTaskTimeResolution::Microseconds:
-        return new MicrosDelayedTaskTimer(timeRemaining);
+        return new MicrosDelayedTaskTimer();
     
     case DelayedTaskTimeResolution::Milliseconds:
-        return new MillisDelayedTaskTimer(timeRemaining);
+        return new MillisDelayedTaskTimer();
     }
 }
 

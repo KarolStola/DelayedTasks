@@ -6,9 +6,6 @@
 
 class MicrosDelayedTaskTimer : public DelayedTaskTimer
 {
-public:
-    MicrosDelayedTaskTimer(long timeRemainging);
-    
 protected:
     virtual unsigned long GetCurrentTime() override;
 };

@@ -5,8 +5,6 @@
 
 class MillisDelayedTaskTimer : public DelayedTaskTimer
 {
-public:
-    MillisDelayedTaskTimer(long timeRemainging);
     
 protected:
     virtual unsigned long GetCurrentTime() override;

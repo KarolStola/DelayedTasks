@@ -7,6 +7,7 @@
 class DelayedTask
 {
 public:
+    DelayedTask(DelayedTaskTimeResolution timeResolution);
     DelayedTask(long delay, DelayedTaskTimeResolution timeResolution);
     void Update();
     bool WasExecuted();
@@ -16,7 +17,7 @@ protected:
     virtual void Execute() = 0;
 
 private:
-    class DelayedTaskTimer * CreateTimerForResolution(long timeRemaining, DelayedTaskTimeResolution timeResolution);
+    class DelayedTaskTimer * CreateTimerForResolution(DelayedTaskTimeResolution timeResolution);
     bool ShouldBeExecuted();
     void Cleanup();
 

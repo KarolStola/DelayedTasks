@@ -2,19 +2,41 @@
 #include "DelayedTaskManager.h"
 #include "DelayedTaskTimer.h"
 
-DelayedTaskTimer::DelayedTaskTimer(unsigned long delay, unsigned long startTime)
-    : delay(delay)
-    , startTime(startTime)
+void DelayedTaskTimer::Start(unsigned long newDelay)
 {
+    isStarted = true;
+    delay = newDelay;
+    startTime = GetCurrentTime();
+}
+
+void DelayedTaskTimer::Stop()
+{
+    isStarted = false;
 }
 
 bool DelayedTaskTimer::CountedDown()
 {
-    return GetElapsedTime() >= delay;
+    if(isStarted)
+    {
+        return GetElapsedTime() >= delay;
+    }
+    else
+    {
+        return false;
+    }
+    
 } 
 
 unsigned long DelayedTaskTimer::GetElapsedTime()
 {
-    return GetCurrentTime() - startTime;
+    if(isStarted)
+    {
+        return GetCurrentTime() - startTime;
+    }
+    else
+    {
+        return 0;
+    }
+    
 }
 
