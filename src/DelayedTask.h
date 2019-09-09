@@ -9,6 +9,8 @@ class DelayedTask
 public:
     DelayedTask(DelayedTaskTimeResolution timeResolution);
     DelayedTask(long delay, DelayedTaskTimeResolution timeResolution);
+    void Delay(unsigned long delay);
+    void Cancel();
     void Update();
     bool WasExecuted();
     virtual ~DelayedTask();

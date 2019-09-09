@@ -19,6 +19,16 @@ bool DelayedTask::ShouldBeExecuted()
     return timer->CountedDown();
 }
 
+void DelayedTask::Delay(unsigned long delay)
+{
+    timer->Start(delay);
+}
+
+void DelayedTask::Cancel()
+{
+    timer->Stop();
+}
+
 void DelayedTask::Update()
 {
     if (ShouldBeExecuted())
