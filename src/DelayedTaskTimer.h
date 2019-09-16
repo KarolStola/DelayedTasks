@@ -6,6 +6,7 @@ class DelayedTaskTimer
 {
 public:
     void Start(unsigned long delay);
+    void Restart();
     void Stop();
     bool CountedDown();
     unsigned long GetElapsedTime();

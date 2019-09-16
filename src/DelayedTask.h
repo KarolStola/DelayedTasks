@@ -10,6 +10,7 @@ public:
     DelayedTask(DelayedTaskTimeResolution timeResolution);
     DelayedTask(long delay, DelayedTaskTimeResolution timeResolution);
     void Delay(unsigned long delay);
+    void Loop(unsigned long delay);
     void Cancel();
     void Update();
     bool WasExecuted();
@@ -23,8 +24,8 @@ private:
     bool ShouldBeExecuted();
     void Cleanup();
 
-    bool wasExecuted = false;
     class DelayedTaskTimer * timer;
+    bool isLooping = false;
 };
 
 #endif

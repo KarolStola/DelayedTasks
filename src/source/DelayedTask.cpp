@@ -21,6 +21,13 @@ bool DelayedTask::ShouldBeExecuted()
 
 void DelayedTask::Delay(unsigned long delay)
 {
+    isLooping = false;
+    timer->Start(delay);
+}
+
+void DelayedTask::Loop(unsigned long delay)
+{
+    isLooping = true;
     timer->Start(delay);
 }
 
@@ -33,15 +40,17 @@ void DelayedTask::Update()
 {
     if (ShouldBeExecuted())
     {
-        timer->Stop();
+        if(isLooping)
+        {
+            timer->Restart();
+        }
+        else
+        {
+            timer->Stop();        
+        }
+        
         Execute();
-        wasExecuted = true;
     }
-}
-
-bool DelayedTask::WasExecuted()
-{
-    return wasExecuted;
 }
 
 class DelayedTaskTimer * DelayedTask::CreateTimerForResolution(DelayedTaskTimeResolution timeResolution)

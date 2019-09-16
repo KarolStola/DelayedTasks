@@ -3,8 +3,13 @@
 
 void DelayedTaskTimer::Start(unsigned long newDelay)
 {
-    isStarted = true;
     delay = newDelay;
+    Restart();
+}
+
+void DelayedTaskTimer::Restart()
+{
+    isStarted = true;
     startTime = GetCurrentTime();
 }
 
